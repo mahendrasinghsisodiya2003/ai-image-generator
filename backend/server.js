@@ -48,7 +48,7 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:3000',
-    'https://ai-image-generator-com.onrender.com',
+    'https://ai-image-generator-yne7.onrender.com',
     'https://ai-image-generator-mahendrasinghsisodiya2003.vercel.app'
   ],
   methods: ['GET', 'POST'],
@@ -59,7 +59,12 @@ app.use('/generate', limiter);
 
 // Health check endpoint
 app.get('/', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'AI Image Generator API is running' });
+  res.status(200).json({ 
+    status: 'ok', 
+    message: 'AI Image Generator API is running',
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Route to handle image generation
