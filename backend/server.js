@@ -45,12 +45,7 @@ const upload = multer({
 
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://ai-image-generator-yne7.onrender.com',
-    'https://ai-image-generator-mahendrasinghsisodiya2003.vercel.app'
-  ],
+  origin: '*', // Allow all origins during development
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -70,12 +65,23 @@ app.get('/', (req, res) => {
 // Route to handle image generation
 app.post('/generate', async (req, res) => {
   try {
+    console.log("Received generation request:", req.body); // Add request logging
+    
     const { prompt, style } = req.body;
     
     if (!prompt || prompt.trim().length < 3) {
       return res.status(400).json({ 
         error: 'Invalid prompt',
         details: 'Please provide at least 3 characters' 
+      });
+    }
+
+    // Verify API key before making request
+    if (!process.env.STABILITY_API_KEY) {
+      console.error("API key missing in request");
+      return res.status(500).json({
+        error: 'Configuration error',
+        details: 'API key not configured'
       });
     }
 

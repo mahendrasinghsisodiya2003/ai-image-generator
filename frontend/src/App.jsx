@@ -24,8 +24,11 @@ function App() {
     setError(null);
 
     try {
+      console.log("Sending request to:", `${API_URL}/generate`);
+      console.log("Request payload:", { prompt, style });
+
       const response = await axios.post(`${API_URL}/generate`, 
-        { prompt: prompt, style: style },
+        { prompt, style },
         {
           timeout: 90000, // 90 seconds timeout
           headers: {
@@ -34,6 +37,8 @@ function App() {
         }
       );
 
+      console.log("Received response:", response.data);
+
       if (!response.data?.imageUrl) {
         throw new Error("Server returned no image");
       }
@@ -41,18 +46,23 @@ function App() {
       setGeneratedImage(response.data.imageUrl);
       
     } catch (error) {
-      console.error("Generation error:", {
-        error: error.response?.data || error.message,
-        prompt: prompt
+      console.error("Generation error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        url: API_URL
       });
 
       setError({
         title: "Generation Failed",
         message: error.response?.data?.details || 
                  error.response?.data?.error || 
-                 error.message,
+                 error.message || 
+                 "Failed to connect to the server",
         suggestion: error.response?.data?.suggestion || 
-                   "Please try a different description"
+                   (error.message?.includes("Network Error") ? 
+                     "Please check your internet connection and try again" : 
+                     "Please try a different description")
       });
     } finally {
       setIsGenerating(false);
