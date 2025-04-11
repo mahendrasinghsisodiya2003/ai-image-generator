@@ -1,0 +1,12 @@
+[build]
+  base = "/"
+  publish = "frontend/dist"
+  command = "cd frontend && npm install && npm run build && cd ../backend && npm install"
+
+[functions]
+  directory = "backend"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200 

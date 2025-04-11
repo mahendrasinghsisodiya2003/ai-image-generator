@@ -9,7 +9,7 @@ const sharp = require('sharp');
 require('dotenv').config();
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 // Verify API key is properly set
 if (!process.env.STABILITY_API_KEY) {
@@ -44,9 +44,18 @@ const upload = multer({
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS || '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use('/generate', limiter);
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'AI Image Generator API is running' });
+});
 
 // Route to handle image generation
 app.post('/generate', async (req, res) => {

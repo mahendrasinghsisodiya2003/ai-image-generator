@@ -21,7 +21,7 @@ function App() {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:3001/generate', 
+      const response = await axios.post('https://ai-image-generator-a9y2.onrender.com/generate', 
         { prompt: prompt, style: style },
         {
           timeout: 90000 // 90 seconds timeout
