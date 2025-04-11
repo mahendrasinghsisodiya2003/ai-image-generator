@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+// API URL based on environment
+const API_URL = import.meta.env.VITE_API_URL || "https://ai-image-generator-com.onrender.com";
+
 function App() {
   const [prompt, setPrompt] = useState("");
   const [style, setStyle] = useState("none");
@@ -21,10 +24,13 @@ function App() {
     setError(null);
 
     try {
-      const response = await axios.post('https://ai-image-generator-a9y2.onrender.com/generate', 
+      const response = await axios.post(`${API_URL}/generate`, 
         { prompt: prompt, style: style },
         {
-          timeout: 90000 // 90 seconds timeout
+          timeout: 90000, // 90 seconds timeout
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
       );
 

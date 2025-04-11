@@ -45,7 +45,12 @@ const upload = multer({
 
 // Middleware
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS || '*',
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://ai-image-generator-com.onrender.com',
+    'https://ai-image-generator-mahendrasinghsisodiya2003.vercel.app'
+  ],
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
